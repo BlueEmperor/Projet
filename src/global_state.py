@@ -6,6 +6,7 @@ from src.config import Config
 
 class GlobalState:
     GAME_STATE = GameStatus.GAMEPLAY
+    PLAYER_STATE = 
     SCREEN = None
 
     @staticmethod
