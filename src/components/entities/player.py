@@ -11,8 +11,8 @@ from src.components.node import Node
 vec = pygame.math.Vector2
 
 class Player(Entity):
-    def __init__(self, map_pos = vec(1,1),pv=20):
-        self.is_moving = False
+    def __init__(self, map_pos = vec(8,2),pv=20):
+        super().__init__()
         self.image = VisualizationService.get_player_image()
         self.rect = self.image.get_rect()
         self.pos = vec(int(Config.WIDTH/2),int(Config.HEIGHT/2))

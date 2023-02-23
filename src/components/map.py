@@ -11,10 +11,10 @@ class Map(pygame.sprite.Sprite):
     wall="w"
     dir={pygame.K_z: vec(0,-1), pygame.K_s: vec(0,1), pygame.K_d: vec(1,0), pygame.K_q: vec(-1,0)}
     
-    def __init__(self,player,pos=vec(1,1)):
+    def __init__(self,player):
         self.image = VisualizationService.get_map_image()
         self.rect = self.image.get_rect()
-        self.rect.topleft = vec(player.rect.topleft[0]-pos[0]*48,player.rect.topleft[1]-pos[1]*48) # type: ignore
+        self.rect.topleft = vec(player.rect.topleft[0]-player.map_pos[0]*48,player.rect.topleft[1]-player.map_pos[1]*48) # type: ignore
         self._mat=[["w"]*16,["w"]+[self.ground]*3+["w"]*2+[self.ground]*4+["w"]*2+[self.ground]*3+["w"],["w"]+[self.ground]*14+["w"],["w"]+[self.ground]*3+["w"]*2+[self.ground]*4+["w"]*2+[self.ground]*3+["w"],["w"]*7+[self.ground]*2+["w"]*7,[" "]*5+["w"]*2+[self.ground]*2+["w"]*2+[" "]*5, [" "]*5+["w"]+[self.ground]*4+["w"]+[" "]*5,[" "]*5+["w"]+[self.ground]*4+["w"]+[" "]*5,[" "]*5+["w"]+[self.ground]*4+["w"]+[" "]*5, [" "]*5+["w"]*6+[" "]*5]
 
     def __repr__(self):

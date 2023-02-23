@@ -2,22 +2,30 @@ import pygame
 
 from src.components.map import Map
 from src.components.display_info import DisplayInfo
+from src.services.visualization_service import VisualizationService
 
 class Entity:
     def __init__(self):
         self.is_moving = False
         self.move_tick=0
-
+        self.is_selected = False
+        self.red_select_image = VisualizationService.get_red_select_image()
+    
     @staticmethod
     def click_event(entities_objects, events, display):
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 for entity in entities_objects:
                     if(entity.rect.collidepoint(pygame.mouse.get_pos())):
+                        if(display.entity!=None):
+                            display.entity.is_selected=False
                         display.entity=entity
+                        display.entity.is_selected=True
                         display.entity_save=entity
                         return
-                display.entity=None
+                if(display.entity!=None):
+                    display.entity.is_selected=False
+                    display.entity=None
                 return
     
     def attack(self,other):
@@ -32,7 +40,9 @@ class Entity:
             map.put(self.map_pos)
 
     def draw(self, SCREEN):
-        SCREEN.blit(self.image, self.rect) # Sprite draw
+        if(self.is_selected):
+            SCREEN.blit(self.red_select_image, self.rect)
+        SCREEN.blit(self.image, self.rect)
 
     def move_animation(self,map,player, entities_objects):
         if(self.is_moving):

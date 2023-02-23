@@ -3,6 +3,8 @@ import pygame
 from path import ASSETS_DIR
 from src.config import Config
 
+pygame.font.init()
+
 class VisualizationService:
     @staticmethod
     def get_player_image():
@@ -19,6 +21,10 @@ class VisualizationService:
     @staticmethod
     def get_vampire_image():
         return(pygame.image.load(ASSETS_DIR / "vampire.png").convert_alpha())
+    
+    @staticmethod
+    def get_red_select_image():
+        return(pygame.image.load(ASSETS_DIR / "red_select.png").convert_alpha())
     
     @staticmethod
     def get_main_font():

@@ -2,6 +2,7 @@ import pygame
 
 from src.config import Config
 from src.services.visualization_service import VisualizationService
+
 vec = pygame.math.Vector2
 
 class DisplayInfo:
@@ -29,5 +30,5 @@ class DisplayInfo:
         
         if(self.entity_save!=None):
             SCREEN.blit(self.entity_save.image,vec(self.x+self.offset+30,30))
-            SCREEN.blit(self.font.render(str(self.entity_save.health),True,(255, 255, 255)), vec(self.x+self.offset+50,30))
+            SCREEN.blit(self.font.render(str(self.entity_save.health),True,(255, 255, 255)), vec(self.x+self.offset+100,40))
         

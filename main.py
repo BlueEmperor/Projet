@@ -7,6 +7,7 @@ from src.components.game_status import GameStatus
 from src.game_phases import main_menu_phase, gameplay_phase, end_menu_phase
 
 pygame.init()
+
 FramePerSec = pygame.time.Clock()
 
 def update_game_display():
