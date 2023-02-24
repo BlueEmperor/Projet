@@ -3,8 +3,6 @@ import pygame
 from src.components.entities.entity import Entity
 from src.services.visualization_service import VisualizationService
 from src.config import Config
-from src.components.map import Map
-from src.global_state import GlobalState
 
 vec = pygame.math.Vector2
 

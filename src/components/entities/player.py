@@ -5,8 +5,9 @@ from src.components.entities.entity import Entity
 from src.config import Config
 from src.components.map import Map
 from src.services.visualization_service import VisualizationService
+from src.components.inventory import Inventory
 from src.global_state import GlobalState
-from src.components.node import Node
+from src.components.status import GameStatus
 
 vec = pygame.math.Vector2
 
@@ -20,14 +21,18 @@ class Player(Entity):
         self.map_pos = map_pos
         self.max_health = pv
         self.health = pv
+        self.inventory = Inventory()
 
-    
-    def update(self, map, entities_objects):
-        self.move_animation(map, self, entities_objects)
+    def lost_game(self):
+        if(self.health <= 0):
+            GlobalState.GAME_STATE = GameStatus.GAME_END
+
+    def move_input(self, map, entities_objects):
 
         keys=pygame.key.get_pressed()
         for key in Map.dir.keys():
             if(keys[key] and not(self.is_moving) and map.is_empty(Map.dir[key]+self.map_pos) and Entity.check_if_moving(entities_objects)):
+                sleep(0.04)
                 self.move(map,Map.dir[key]+self.map_pos,Map.dir[key],  False)
                 for i in range(len(entities_objects)):
                     entities_objects[i].move_tick=(i+1)*6

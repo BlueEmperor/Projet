@@ -3,7 +3,7 @@ from sys import exit
 
 from src.config import Config
 from src.global_state import GlobalState
-from src.components.game_status import GameStatus
+from src.components.status import GameStatus
 from src.game_phases import main_menu_phase, gameplay_phase, end_menu_phase
 
 pygame.init()
@@ -27,7 +27,6 @@ def main():
 
         #MusicService.start_background_music()
         for event in events:
-            
             if(event.type == pygame.QUIT):
                 pygame.quit()
                 exit()

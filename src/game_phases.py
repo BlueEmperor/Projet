@@ -4,11 +4,11 @@ from src.services.visualization_service import VisualizationService
 from src.components.map import Map
 from src.components.entities.player import Player
 from src.components.entities.entity import Entity
-from src.components.display_info import DisplayInfo
-from src.global_state import GlobalState
+from src.components.UI.display_info import DisplayInfo
+from src.global_state import GlobalState, PlayerStatus
 from src.services.draw_service import draw_sprites
-from src.components.entities.squelette import Squelette
-from src.components.entities.vampire import Vampire
+from src.components.UI.hotbar import Hotbar
+from src.config import Config
 
 vec = pygame.math.Vector2
 
@@ -16,20 +16,35 @@ GlobalState.load_main_screen()
 
 player = Player()
 map = Map(player)
-entities_objects = [Squelette(player.map_pos,vec(8,8), map),Vampire(player.map_pos,vec(12,2), map)]
-display=DisplayInfo()
+display = DisplayInfo()
+hotbar = Hotbar()
 
 def main_menu_phase(events):
     pass
 
 def gameplay_phase(events):
-    player.update(map, entities_objects)
-    Entity.click_event(entities_objects, events, display)
+    player.move_animation(map, map.entities_objects)
+    for i in range(len(map.entities_objects)):
+        if(map.entities_objects[i].check_if_dead()):
+            map.delete(i)
+            break
+
+    player.lost_game()
+    if(GlobalState.PLAYER_STATE == PlayerStatus.MOVEMENT):
+        player.move_input(map, map.entities_objects)
+    
+    elif(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK):
+        map.click_event(events, hotbar)
+
+    Entity.click_event(map.entities_objects, events, display)
+    hotbar.click_event(events, player, map)
     GlobalState.SCREEN.fill("black") # type: ignore
-    display.draw(GlobalState.SCREEN)
     map.draw(GlobalState.SCREEN)
     player.draw(GlobalState.SCREEN)
-    draw_sprites(entities_objects)
+    draw_sprites(map.entities_objects)
+    display.draw(GlobalState.SCREEN)
+    hotbar.draw(GlobalState.SCREEN, player)
 
 def end_menu_phase(events):
-    pass
+    GlobalState.SCREEN.fill((71, 137, 216))
+    GlobalState.SCREEN.blit(VisualizationService.get_main_font().render("PERDU",True,(0, 0, 0)), vec(Config.WIDTH/2, Config.HEIGHT/2))

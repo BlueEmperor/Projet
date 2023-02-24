@@ -27,9 +27,28 @@ class VisualizationService:
         return(pygame.image.load(ASSETS_DIR / "red_select.png").convert_alpha())
     
     @staticmethod
+    def get_select_hotbar_image():
+        return(pygame.image.load(ASSETS_DIR / "select_hotbar.png").convert_alpha())
+    
+    @staticmethod
     def get_main_font():
         return(pygame.font.Font(None, 30))
 
+    @staticmethod
+    def get_hotbar_image():
+        return(pygame.image.load(ASSETS_DIR / "hotbar.png").convert_alpha())
+    
+    @staticmethod
+    def get_sword_icon_image():
+        return(pygame.image.load(ASSETS_DIR / "sword_icon.png").convert_alpha())
+    
+    @staticmethod
+    def get_bow_icon_image():
+        return(pygame.image.load(ASSETS_DIR / "bow_icon.png").convert_alpha())
+    @staticmethod
+    def get_tile_image():
+        return(pygame.image.load(ASSETS_DIR / "selected_tile.png").convert_alpha())
+    
     @staticmethod
     def load_main_game_displays():
         pygame.display.set_caption("Don't Touch My Presents")

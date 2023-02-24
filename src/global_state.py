@@ -1,12 +1,12 @@
 import pygame
 
-from src.components.game_status import GameStatus
+from src.components.status import GameStatus, PlayerStatus
 from src.config import Config
 
 
 class GlobalState:
     GAME_STATE = GameStatus.GAMEPLAY
-    PLAYER_STATE = 
+    PLAYER_STATE = PlayerStatus.MOVEMENT
     SCREEN = None
 
     @staticmethod
