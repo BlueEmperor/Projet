@@ -18,6 +18,7 @@ player = Player()
 map = Map(player)
 display = DisplayInfo()
 hotbar = Hotbar()
+damage_list = []
 
 def main_menu_phase(events):
     pass
@@ -31,10 +32,10 @@ def gameplay_phase(events):
 
     player.lost_game()
     if(GlobalState.PLAYER_STATE == PlayerStatus.MOVEMENT):
-        player.move_input(map, map.entities_objects)
+        player.move_input(map, map.entities_objects, damage_list)
     
     elif(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK):
-        map.click_event(events, hotbar)
+        map.click_event(events, hotbar, damage_list)
 
     Entity.click_event(map.entities_objects, events, display)
     hotbar.click_event(events, player, map)
@@ -42,6 +43,11 @@ def gameplay_phase(events):
     map.draw(GlobalState.SCREEN)
     player.draw(GlobalState.SCREEN)
     draw_sprites(map.entities_objects)
+    for i in range(len(damage_list)):
+        damage_list[i].draw(GlobalState.SCREEN)
+        if(damage_list[i].update()):
+            damage_list.pop(i)
+            break
     display.draw(GlobalState.SCREEN)
     hotbar.draw(GlobalState.SCREEN, player)
 

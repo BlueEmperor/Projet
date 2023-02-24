@@ -27,7 +27,7 @@ class Player(Entity):
         if(self.health <= 0):
             GlobalState.GAME_STATE = GameStatus.GAME_END
 
-    def move_input(self, map, entities_objects):
+    def move_input(self, map, entities_objects, damage_list):
 
         keys=pygame.key.get_pressed()
         for key in Map.dir.keys():
@@ -36,4 +36,4 @@ class Player(Entity):
                 self.move(map,Map.dir[key]+self.map_pos,Map.dir[key],  False)
                 for i in range(len(entities_objects)):
                     entities_objects[i].move_tick=(i+1)*6
-                Entity.play(map, entities_objects, self)
+                Entity.play(map, entities_objects, self, damage_list)

@@ -105,18 +105,18 @@ class Map(pygame.sprite.Sprite):
                     tile_list.append([vec(i,j),self._mat[int(pos[1])][int(pos[0])]!=self.ground])
         return(tile_list)
 
-    def click_event(self, events, hotbar):
+    def click_event(self, events, hotbar, damage_list):
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 for tile in self.attack_tiles:
                     if(tile[1]):
                         rect=pygame.Rect(self.player.rect.topleft+tile[0]*48,(45,45))
                         if(rect.collidepoint(pygame.mouse.get_pos())):
-                            self.player.attack(self.get_entity_by_coord(tile[0]+self.player.map_pos))
+                            self.player.attack(self.get_entity_by_coord(tile[0]+self.player.map_pos), damage_list)
                             self.attack_tiles=[]
                             hotbar.selected=None
                             GlobalState.PLAYER_STATE = PlayerStatus.MOVEMENT
-                            Entity.play(self, self.entities_objects, self.player)
+                            Entity.play(self, self.entities_objects, self.player, damage_list)
                             return
     
     def delete(self, i):

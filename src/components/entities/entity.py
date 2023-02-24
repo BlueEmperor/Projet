@@ -3,6 +3,7 @@ import pygame
 from src.components.UI.display_info import DisplayInfo
 from src.services.visualization_service import VisualizationService
 from src.components.items.basic_sword import BasicSword
+from src.components.damage_effect import DamageEffect
 
 class Entity:
     def __init__(self):
@@ -30,8 +31,9 @@ class Entity:
                     display.entity=None
                 return
     
-    def attack(self,other):
+    def attack(self,other, damage_list):
         if(other != None):
+            damage_list.append(DamageEffect("-"+str(self.weapon.damage),other.rect.center))
             other.health-=self.weapon.damage
 
     def move(self, map, coord,relative_coord, trace=True):
@@ -68,10 +70,10 @@ class Entity:
         return(self.health <= 0)
     
     @staticmethod
-    def play(map, entities_objects, player):
+    def play(map, entities_objects, player, damage_list):
         for entity in entities_objects:
             if(map.can_attack(entity,player)):
-                entity.attack(player)
+                entity.attack(player, damage_list)
             else:
                 move=map.A_star(entity.map_pos, player.map_pos)
                 if(not(move==[] or entity.map_pos == player.map_pos)):
