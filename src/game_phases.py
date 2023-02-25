@@ -34,16 +34,18 @@ def gameplay_phase(events):
     player.lost_game()
     if(GlobalState.PLAYER_STATE == PlayerStatus.MOVEMENT):
         player.move_input(map, map.entities_objects, damage_list)
+        Entity.click_event(map.entities_objects, events, display)
+        hotbar.click_event(events, player, map)
     
     elif(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK):
         map.click_event(events, hotbar, damage_list)
+        hotbar.click_event(events, player, map)
 
     elif(GlobalState.PLAYER_STATE == PlayerStatus.INVENTORY_MENU):
         pass
 
     player.inventory.events_handle(events)
-    Entity.click_event(map.entities_objects, events, display)
-    hotbar.click_event(events, player, map)
+
     GlobalState.SCREEN.fill("black") # type: ignore
     map.draw(GlobalState.SCREEN)
     player.draw(GlobalState.SCREEN)
@@ -53,7 +55,7 @@ def gameplay_phase(events):
         if(damage_list[i].update()):
             damage_list.pop(i)
             break
-    player.inventory.draw(GlobalState.SCREEN)
+    player.inventory.draw(GlobalState.SCREEN, player)
     display.draw(GlobalState.SCREEN)
     hotbar.draw(GlobalState.SCREEN, player)
 
