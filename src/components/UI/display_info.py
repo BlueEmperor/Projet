@@ -21,12 +21,12 @@ class DisplayInfo:
         pygame.draw.rect(SCREEN, (84, 84, 84), self.rect)
         if(self.entity == None):
             if(self.offset<self.WIDTH):
-                self.offset+=8
+                self.offset+=4
             else:
                 self.entity_save = None
         else:
             if(self.offset>0):
-                self.offset-=8
+                self.offset-=4
         
         if(self.entity_save!=None):
             SCREEN.blit(self.entity_save.image,vec(self.x+self.offset+30,30))

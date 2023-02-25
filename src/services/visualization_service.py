@@ -45,9 +45,14 @@ class VisualizationService:
     @staticmethod
     def get_bow_icon_image():
         return(pygame.image.load(ASSETS_DIR / "bow_icon.png").convert_alpha())
+    
     @staticmethod
     def get_tile_image():
         return(pygame.image.load(ASSETS_DIR / "selected_tile.png").convert_alpha())
+    
+    @staticmethod
+    def get_cursor_image():
+        return(pygame.image.load(ASSETS_DIR / "cursor.png").convert_alpha())
     
     @staticmethod
     def load_main_game_displays():

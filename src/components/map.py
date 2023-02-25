@@ -30,7 +30,7 @@ class Map(pygame.sprite.Sprite):
         return("\n".join("".join(j for j in i) for i in self._mat)+"\n")
     
     def __contains__(self, coords):
-        return(0<=int(coords[1])<=len(self._mat) and 0<=int(coords[0])<=len(self._mat[int(coords[1])]))
+        return(0<=int(coords[1])<len(self._mat) and 0<=int(coords[0])<len(self._mat[int(coords[1])]))
     
     def get_entity_by_coord(self, coords):
         for entity in self.entities_objects:
@@ -101,7 +101,7 @@ class Map(pygame.sprite.Sprite):
         for i in range(-Range[1],Range[1]+1):
             for j in range(-Range[1],Range[1]+1):
                 pos = vec(i,j)+entity.map_pos
-                if(Range[0]<=abs(i)+abs(j)<=Range[1] and pos in self and self._mat[int(pos[1])][int(pos[0])]!=self.wall):
+                if(Range[0]<=abs(i)+abs(j)<=Range[1] and pos in self and not(self._mat[int(pos[1])][int(pos[0])] in [self.wall, " "])):
                     tile_list.append([vec(i,j),self._mat[int(pos[1])][int(pos[0])]!=self.ground])
         return(tile_list)
 

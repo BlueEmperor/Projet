@@ -55,16 +55,16 @@ class Entity:
 
     def move_animation(self,map, entities_objects):
         if(self.is_moving):
-            map.rect.topleft-=self.is_moving*3
+            map.rect.topleft-=self.is_moving*1
             for entity in entities_objects:
-                entity.rect.topleft-=self.is_moving*3
+                entity.rect.topleft-=self.is_moving*1
             if((self.rect.topleft[0]-map.rect.topleft[0])%48==0 and (self.rect.topleft[1]-map.rect.topleft[1])%48==0):# type: ignore                
                 self.is_moving=False
 
         for entity in entities_objects:
             if(entity.move_tick==0):
                 if(entity.is_moving):
-                   entity.rect.topleft-=entity.is_moving*3
+                   entity.rect.topleft-=entity.is_moving*1
                    if((entity.rect.topleft[0]-self.rect.topleft[0])%48==0 and (entity.rect.topleft[1]-self.rect.topleft[1])%48==0 and not(self.is_moving)):# type: ignore                
                         entity.is_moving=False
             else:

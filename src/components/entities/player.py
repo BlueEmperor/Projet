@@ -22,18 +22,18 @@ class Player(Entity):
         self.max_health = pv
         self.health = pv
         self.inventory = Inventory()
+        self.weapon = self.inventory.in_hotbar[0 ]
 
     def lost_game(self):
         if(self.health <= 0):
             GlobalState.GAME_STATE = GameStatus.GAME_END
 
     def move_input(self, map, entities_objects, damage_list):
-
         keys=pygame.key.get_pressed()
         for key in Map.dir.keys():
             if(keys[key] and not(self.is_moving) and map.is_empty(Map.dir[key]+self.map_pos) and Entity.check_if_moving(entities_objects)):
                 sleep(0.04)
                 self.move(map,Map.dir[key]+self.map_pos,Map.dir[key],  False)
                 for i in range(len(entities_objects)):
-                    entities_objects[i].move_tick=(i+1)*6
+                    entities_objects[i].move_tick=(i+1)*15
                 Entity.play(map, entities_objects, self, damage_list)

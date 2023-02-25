@@ -5,7 +5,7 @@ from src.config import Config
 from src.global_state import GlobalState
 from src.components.status import GameStatus
 from src.game_phases import main_menu_phase, gameplay_phase, end_menu_phase
-
+from src.services.draw_cursor import DrawCursor
 pygame.init()
 
 FramePerSec = pygame.time.Clock()
@@ -25,7 +25,7 @@ def main():
         elif GlobalState.GAME_STATE == GameStatus.GAME_END:
             end_menu_phase(events)
 
-        #MusicService.start_background_music()
+        DrawCursor(GlobalState.SCREEN)
         for event in events:
             if(event.type == pygame.QUIT):
                 pygame.quit()

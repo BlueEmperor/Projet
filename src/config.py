@@ -1,5 +1,5 @@
 class Config:
-    FPS=60
+    FPS=150
 
     #Taille de l'écran
     HEIGHT=600

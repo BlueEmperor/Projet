@@ -13,6 +13,7 @@ from src.config import Config
 vec = pygame.math.Vector2
 
 GlobalState.load_main_screen()
+pygame.mouse.set_visible(False)
 
 player = Player()
 map = Map(player)
