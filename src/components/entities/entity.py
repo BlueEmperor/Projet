@@ -19,7 +19,11 @@ class Entity:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
                 for entity in entities_objects:
                     if(entity.rect.collidepoint(pygame.mouse.get_pos())):
-                        if(display.entity!=None):
+                        if(display.entity==entity):
+                            display.entity.is_selected=False
+                            display.entity=None
+                            return
+                        elif(display.entity!=None):
                             display.entity.is_selected=False
                         display.entity=entity
                         display.entity.is_selected=True

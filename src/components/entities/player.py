@@ -5,7 +5,7 @@ from src.components.entities.entity import Entity
 from src.config import Config
 from src.components.map import Map
 from src.services.visualization_service import VisualizationService
-from src.components.inventory import Inventory
+from src.components.UI.inventory import Inventory
 from src.global_state import GlobalState
 from src.components.status import GameStatus
 
