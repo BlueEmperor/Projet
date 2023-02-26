@@ -61,7 +61,7 @@ class Inventory:
 
         if(self.item_on_cursor!=None and not(self.right_click)):
             self.self_alpha_screen.fill((0,0,0,0))
-            pygame.draw.rect(self.self_alpha_screen , (160, 160, 160, 160), self.item_on_cursor.rect)
+            pygame.draw.rect(self.self_alpha_screen , (200, 200, 200, 200), self.item_on_cursor.rect)
             SCREEN.blit(self.self_alpha_screen, (0,0))
 
         SCREEN.blit(self.alpha_screen, (0,0))
@@ -100,12 +100,14 @@ class Inventory:
             if(event.type == pygame.MOUSEBUTTONDOWN):
                 if(event.button == 3):
                     if(self.item_on_cursor != None):
-                        self.right_click = [pygame.Rect(pygame.mouse.get_pos(), (110, 160)), self.item_on_cursor]
+                        self.right_click = [pygame.Rect(pygame.mouse.get_pos(), (110, 60)), self.item_on_cursor]
                         self.buttons[0]=[pygame.Rect(pygame.mouse.get_pos()[0],pygame.mouse.get_pos()[1]+30*i, 110,30) for i in range(len(self.buttons[1]))]
                     else:
                         self.right_click = None
+                        self.buttons[0]=[]
                 elif(event.button == 1 and self.right_click != None):
                     self.right_click = None
+                    self.buttons[0]=[]
 
             elif(event.type == pygame.KEYDOWN and event.key == pygame.K_e):
                 if(self.is_open):

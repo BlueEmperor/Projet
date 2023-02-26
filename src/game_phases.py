@@ -55,9 +55,9 @@ def gameplay_phase(events):
         if(damage_list[i].update()):
             damage_list.pop(i)
             break
-    player.inventory.draw(GlobalState.SCREEN, player)
     display.draw(GlobalState.SCREEN)
     hotbar.draw(GlobalState.SCREEN, player)
+    player.inventory.draw(GlobalState.SCREEN, player)
 
 def end_menu_phase(events):
     GlobalState.SCREEN.fill((71, 137, 216))
