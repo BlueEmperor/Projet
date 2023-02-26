@@ -12,7 +12,7 @@ vec = pygame.math.Vector2
 
 class Inventory:
     def __init__(self):
-        self.size=16
+        self.size=18
         self.items=[BasicSword(),EpicSword(),BasicBow(),BasicSword(),EpicSword(),BasicBow(),BasicSword(),EpicSword(),BasicBow(),BasicSword(),EpicSword(),BasicBow()]
         self.in_hotbar=[BasicSword(),EpicSword(),BasicBow()]
         self.is_open=False
@@ -24,9 +24,12 @@ class Inventory:
         self.col = 4
         self.rect=pygame.Rect(self.offset,25,self.WIDTH,self.HEIGHT)
         self.alpha_screen = pygame.Surface((Config.WIDTH, Config.HEIGHT), pygame.SRCALPHA)
+        self.self_alpha_screen = pygame.Surface((Config.WIDTH, Config.HEIGHT), pygame.SRCALPHA)
         self.item_on_cursor = None
+        self.right_click = False
         self.font=VisualizationService.get_main_font()
         self.alpha=200
+        self.buttons = [[], [self.destroy, self.destroy]]
 
     def draw(self, SCREEN, player):
 
@@ -43,26 +46,67 @@ class Inventory:
         self.alpha_screen.blit(self.font.render("Inventaire",True,(255, 255, 255)), (self.offset+125,50))
         self.alpha_screen.blit(player.image, vec(self.offset+25,50))
 
-        for i in range(self.col):
-            for j in range(int(self.size//self.col)):
+        for i in range(self.size//self.col):
+            for j in range(int(self.col)):
                 pygame.draw.rect(self.alpha_screen, (51, 51, 51, self.alpha), pygame.Rect(j*70+25+self.offset,120+i*70, 64, 64))
                 if(len(self.items)>i*4+j):
                     self.items[i*4+j].rect.topleft=vec(j*70+25+self.offset,120+i*70)
                     self.alpha_screen.blit(self.items[i*4+j].image,vec(self.offset+j*70+25,120+i*70))
+        
+        for j in range(self.size%self.col):
+            pygame.draw.rect(self.alpha_screen, (51, 51, 51, self.alpha), pygame.Rect(j*70+25+self.offset,120+self.size//self.col*70, 64, 64))
+            if(len(self.items)>self.size//self.col*4+j):
+                self.items[self.size//self.col*4+j].rect.topleft=vec(j*70+25+self.offset,120+self.size//self.col*70)
+                self.alpha_screen.blit(self.items[self.size//self.col*4+j].image,vec(self.offset+j*70+25,120+self.size//self.col*70))
+
+        if(self.item_on_cursor!=None and not(self.right_click)):
+            self.self_alpha_screen.fill((0,0,0,0))
+            pygame.draw.rect(self.self_alpha_screen , (160, 160, 160, 160), self.item_on_cursor.rect)
+            SCREEN.blit(self.self_alpha_screen, (0,0))
 
         SCREEN.blit(self.alpha_screen, (0,0))
 
-        if(self.item_on_cursor!=None):
+        if(self.item_on_cursor!=None and not(self.right_click)):
             rect=pygame.Rect(0,0,200,100)
-            rect.bottomleft=pygame.mouse.get_pos()
-            pygame.draw.rect(SCREEN, (30, 30, 30, self.alpha), rect)
+            rect.topleft=(pygame.mouse.get_pos()[0]+30,pygame.mouse.get_pos()[1]-50)
+            pygame.draw.rect(SCREEN, (30, 30, 30), rect)
             SCREEN.blit(self.font.render("Damage : " + str(self.item_on_cursor.damage),True,(255, 255, 255)), (rect.topleft[0]+10,rect.topleft[1]+10))
             SCREEN.blit(self.font.render("Portée : " + str(self.item_on_cursor.range),True,(255, 255, 255)), (rect.topleft[0]+10,rect.topleft[1]+40))
+        
+        elif(self.right_click):
+            pygame.draw.rect(SCREEN, (30,30, 30), self.right_click[0])
+            SCREEN.blit(self.font.render("Destroy",True,(255, 255, 255)), pygame.Rect((self.right_click[0].topleft[0]+5,self.right_click[0].topleft[1]+5), (80,80)))
+            SCREEN.blit(self.font.render("Ez",True,(255, 255, 255)), pygame.Rect((self.right_click[0].topleft[0]+5,self.right_click[0].topleft[1]+35), (80,80)))
+            for button in self.buttons[0]:
+                if(button.collidepoint(pygame.mouse.get_pos())):
+                    self.self_alpha_screen.fill((0,0,0,0))
+                    pygame.draw.rect(self.self_alpha_screen, (110, 110, 110, 160), button)
+                    SCREEN.blit(self.self_alpha_screen, (0,0))
+        
+    def destroy(self, item):
+        self.items.pop(self.items.index(item))
 
     def events_handle(self, events):
         for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                pass
+            if(self.buttons[0] != []):
+                if(event.type == pygame.MOUSEBUTTONDOWN and event.button == 1):
+                    for i in range(len(self.buttons[0])):
+                        if(self.buttons[0][i].collidepoint(pygame.mouse.get_pos())):
+                            self.buttons[1][i](self.right_click[1])
+                            self.buttons[0] = []
+                            self.right_click = None
+                            return
+                        
+            if(event.type == pygame.MOUSEBUTTONDOWN):
+                if(event.button == 3):
+                    if(self.item_on_cursor != None):
+                        self.right_click = [pygame.Rect(pygame.mouse.get_pos(), (110, 160)), self.item_on_cursor]
+                        self.buttons[0]=[pygame.Rect(pygame.mouse.get_pos()[0],pygame.mouse.get_pos()[1]+30*i, 110,30) for i in range(len(self.buttons[1]))]
+                    else:
+                        self.right_click = None
+                elif(event.button == 1 and self.right_click != None):
+                    self.right_click = None
+
             elif(event.type == pygame.KEYDOWN and event.key == pygame.K_e):
                 if(self.is_open):
                     self.is_open=False
@@ -75,5 +119,6 @@ class Inventory:
             if(item.rect.collidepoint(pygame.mouse.get_pos())):
                 self.item_on_cursor=item
                 return
-        
+
+
         self.item_on_cursor=None
