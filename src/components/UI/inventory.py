@@ -3,6 +3,7 @@ import pygame
 from src.components.items.basic_sword import BasicSword
 from src.components.items.basic_bow import BasicBow
 from src.components.items.epic_sword import EpicSword
+from src.components.items.boule_de_feu_staff import BdfStaff
 from src.global_state import GlobalState
 from src.components.status import PlayerStatus
 from src.config import Config
@@ -14,7 +15,7 @@ class Inventory:
     def __init__(self):
         self.size=18
         self.items=[BasicSword(),EpicSword(),BasicBow(),BasicSword(),EpicSword(),BasicBow(),BasicSword(),EpicSword(),BasicBow(),BasicSword(),EpicSword(),BasicBow()]
-        self.in_hotbar=[BasicSword(),EpicSword(),BasicBow()]
+        self.in_hotbar=[BasicSword(),BdfStaff(),BasicBow()]
         self.is_open=False
         self.offset=0
         self.WIDTH = 320

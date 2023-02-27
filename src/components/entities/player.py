@@ -22,7 +22,8 @@ class Player(Entity):
         self.max_health = pv
         self.health = pv
         self.inventory = Inventory()
-        self.weapon = self.inventory.in_hotbar[0 ]
+        self.weapon = self.inventory.in_hotbar[0]
+        self.gold = 0
 
     def lost_game(self):
         if(self.health <= 0):

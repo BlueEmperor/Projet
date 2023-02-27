@@ -8,6 +8,7 @@ from src.components.entities.squelette import Squelette
 from src.components.entities.vampire import Vampire
 from src.global_state import GlobalState
 from src.components.status import PlayerStatus
+from math import cos, sin, pi
 
 vec = pygame.math.Vector2
 
@@ -25,6 +26,7 @@ class Map(pygame.sprite.Sprite):
         self.player = player
         self.entities_objects = [Squelette(player.map_pos,vec(8,8), self),Vampire(player.map_pos,vec(12,2), self)]
         self.attack_tiles = []
+        self.not_in_sight_tiles = []
         
     def __repr__(self):
         return("\n".join("".join(j for j in i) for i in self._mat)+"\n")
@@ -58,11 +60,14 @@ class Map(pygame.sprite.Sprite):
                     color=(234, 74, 63)
                 else:
                     color=(52, 179, 243)
-            
             pygame.draw.rect(SCREEN, color, rect)
-    
+
+        for tile in self.not_in_sight_tiles:
+            rect=pygame.Rect(self.player.rect.topleft+tile*48,(45,45))
+            pygame.draw.rect(SCREEN, (135, 196, 226), rect)
+
     def can_attack(self, attaquant, cible):
-        tile_list=self.create_tile_list(attaquant.weapon.range, attaquant)
+        tile_list=self.create_tile_list(attaquant.weapon.range, attaquant)[0]
         for tile in tile_list:
             if(cible.map_pos==tile[0]+attaquant.map_pos):
                 return(True)
@@ -98,12 +103,28 @@ class Map(pygame.sprite.Sprite):
 
     def create_tile_list(self, Range, entity):
         tile_list = []
-        for i in range(-Range[1],Range[1]+1):
-            for j in range(-Range[1],Range[1]+1):
-                pos = vec(i,j)+entity.map_pos
-                if(Range[0]<=abs(i)+abs(j)<=Range[1] and pos in self and not(self._mat[int(pos[1])][int(pos[0])] in [self.wall, " "])):
-                    tile_list.append([vec(i,j),self._mat[int(pos[1])][int(pos[0])]!=self.ground])
-        return(tile_list)
+        second_tile_list = []
+        if(entity.weapon.range_type=="around"):
+            for i in range(-Range[1],Range[1]+1):
+                for j in range(-Range[1],Range[1]+1):
+                    pos = vec(i,j)+entity.map_pos
+                    if(Range[0]<=abs(i)+abs(j)<=Range[1] and pos in self and not(self._mat[int(pos[1])][int(pos[0])] in [self.wall, " "])):
+                        if(self.line_of_sight(entity.map_pos,pos)):
+                            tile_list.append([vec(i,j),self._mat[int(pos[1])][int(pos[0])]!=self.ground])
+                        else:
+                            second_tile_list.append(vec(i,j))
+        
+        elif(entity.weapon.range_type == "linear"):
+            for i in range(4):
+                for j in range(Range[0], Range[1]+1):
+                    pos = vec(j*cos(pi/2*i),j*sin(pi/2*i))+entity.map_pos
+                    if(pos in self and not(self._mat[int(pos[1])][int(pos[0])] in [self.wall, " "])):
+                        if(self.line_of_sight(entity.map_pos,pos)):
+                            tile_list.append([vec(j*cos(pi/2*i),j*sin(pi/2*i)),self._mat[int(pos[1])][int(pos[0])]!=self.ground])
+                        else:
+                            second_tile_list.append(vec(j*cos(pi/2*i),j*sin(pi/2*i)))
+                        
+        return(tile_list, second_tile_list)
 
     def click_event(self, events, hotbar, damage_list):
         for event in events:
@@ -114,6 +135,7 @@ class Map(pygame.sprite.Sprite):
                         if(rect.collidepoint(pygame.mouse.get_pos())):
                             self.player.attack(self.get_entity_by_coord(tile[0]+self.player.map_pos), damage_list)
                             self.attack_tiles=[]
+                            self.not_in_sight_tiles=[]
                             hotbar.selected=None
                             GlobalState.PLAYER_STATE = PlayerStatus.MOVEMENT
                             Entity.play(self, self.entities_objects, self.player, damage_list)
@@ -123,3 +145,17 @@ class Map(pygame.sprite.Sprite):
         pos=self.entities_objects[i].map_pos
         self._mat[int(pos[1])][int(pos[0])] = self.ground
         self.entities_objects.pop(i)
+    
+    def line_of_sight(self, coord1, coord2):
+        x, y = coord1[0]+0.5, coord1[1]+0.5
+        if(coord2[0] - coord1[0]==0):
+            return(False)
+        slope = (coord2[1] - coord1[1])/(coord2[0] - coord1[0])
+        b = y - slope*x
+        for i in range(min(int(x)+1,int(coord2[0])+1), max(int(x)+1,int(coord2[0])+1)):
+            if(self._mat[int(slope*i+b)][i]!=self.ground):# and not(vec(i,int(slope*i+b)==coord2))):
+                return(False)
+        for i in range(min(int(y)+1,int(coord2[1])+1), max(int(y)+1,int(coord2[1])+1)):
+            if(self._mat[i][int((i-b)/slope)]!=self.ground):# and not(vec(int((i-b)/slope)==coord2))):
+                return(False)
+        return(True)

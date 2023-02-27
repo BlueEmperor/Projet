@@ -3,8 +3,6 @@ import pygame
 from path import ASSETS_DIR
 from src.config import Config
 
-pygame.font.init()
-
 class VisualizationService:
     @staticmethod
     def get_player_image():
