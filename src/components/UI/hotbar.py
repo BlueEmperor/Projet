@@ -39,9 +39,12 @@ class Hotbar:
                             player.weapon = None
                             self.selected=None
                             map.attack_tiles=[]
+                            map.not_in_sight_tiles=[]
                             GlobalState.PLAYER_STATE = PlayerStatus.MOVEMENT
                         else:
                             player.weapon = item
                             self.selected=item
-                            map.attack_tiles=map.create_tile_list(item.range, player)
+                            tiles_list=map.create_tile_list(item.range, player)
+                            map.attack_tiles=tiles_list[0]
+                            map.not_in_sight_tiles=tiles_list[1]
                             GlobalState.PLAYER_STATE = PlayerStatus.ATTACK
