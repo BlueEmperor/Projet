@@ -148,14 +148,16 @@ class Map(pygame.sprite.Sprite):
     
     def line_of_sight(self, coord1, coord2):
         x, y = coord1[0]+0.5, coord1[1]+0.5
-        if(coord2[0] - coord1[0]==0):
-            return(False)
-        slope = (coord2[1] - coord1[1])/(coord2[0] - coord1[0])
-        b = y - slope*x
-        for i in range(min(int(x)+1,int(coord2[0])+1), max(int(x)+1,int(coord2[0])+1)):
-            if(self._mat[int(slope*i+b)][i]!=self.ground):# and not(vec(i,int(slope*i+b)==coord2))):
-                return(False)
-        for i in range(min(int(y)+1,int(coord2[1])+1), max(int(y)+1,int(coord2[1])+1)):
-            if(self._mat[i][int((i-b)/slope)]!=self.ground):# and not(vec(int((i-b)/slope)==coord2))):
-                return(False)
+        if(coord2[0] - coord1[0]!=0):
+            slope = (coord2[1] - coord1[1])/(coord2[0] - coord1[0])
+            b = y - slope*x
+            for i in range(min(int(x)+1,int(coord2[0])+1), max(int(x)+1,int(coord2[0]))):
+                if(vec(i, int(slope*i+b)) in self and vec(self._mat[int(slope*i+b)][i]!=self.ground)):# and not(vec(i,int(slope*i+b)==coord2))):
+                    return(False)
+        if(coord2[1] - coord1[1]!=0):
+            slope = (coord2[0] - coord1[0])/(coord2[1] - coord1[1])
+            b = y - slope*x
+            for i in range(min(int(y)+1,int(coord2[1])+1), max(int(y)+1,int(coord2[1]))):
+                if(vec(int((i-b)*slope),i) in self and self._mat[i][int((i-b)*slope)]!=self.ground):# and not(vec(int((i-b)/slope)==coord2))):
+                    return(False)
         return(True)
