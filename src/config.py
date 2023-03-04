@@ -2,5 +2,5 @@ class Config:
     FPS=150
 
     #Taille de l'écran
-    HEIGHT=600
-    WIDTH=800
+    HEIGHT=800
+    WIDTH=1400

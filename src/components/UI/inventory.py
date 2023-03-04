@@ -14,7 +14,7 @@ vec = pygame.math.Vector2
 class Inventory:
     def __init__(self):
         self.size=18
-        self.items=[BasicSword(),EpicSword(),BasicBow(),BasicSword(),EpicSword(),BasicBow(),BasicSword(),EpicSword(),BasicBow(),BasicSword(),EpicSword(),BasicBow()]
+        self.items=[BasicSword(),EpicSword(),BasicBow(),BasicSword(),EpicSword(),BasicBow(),BasicSword(),EpicSword(),BasicBow(),BasicSword(),EpicSword()]
         self.in_hotbar=[BasicSword(),BdfStaff(),BasicBow()]
         self.is_open=False
         self.offset=0

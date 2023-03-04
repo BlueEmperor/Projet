@@ -5,8 +5,8 @@ from src.config import Config
 
 class VisualizationService:
     @staticmethod
-    def get_player_image():
-        return(pygame.image.load(ASSETS_DIR / "player.png").convert_alpha())
+    def get_player_image_list():
+        return([[pygame.image.load(ASSETS_DIR / "player" / ("player"+str(i+1)+".png")).convert_alpha(),45] for i in range(4)])
 
     @staticmethod
     def get_map_image():

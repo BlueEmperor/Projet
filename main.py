@@ -1,6 +1,7 @@
 import pygame
 pygame.init()
 from sys import exit
+from time import time
 
 from src.config import Config
 from src.global_state import GlobalState
@@ -17,6 +18,7 @@ def update_game_display():
 
 def main():
     while True:
+        fps = time()
         events = pygame.event.get()
         if GlobalState.GAME_STATE == GameStatus.MAIN_MENU:
             main_menu_phase(events)
@@ -32,6 +34,7 @@ def main():
                 exit()
         
         update_game_display()
+        pygame.display.set_caption(str(int(1/(time()-fps))))
 
 
 if __name__ == "__main__":

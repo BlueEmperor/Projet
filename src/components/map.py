@@ -8,7 +8,7 @@ from src.components.entities.squelette import Squelette
 from src.components.entities.vampire import Vampire
 from src.global_state import GlobalState
 from src.components.status import PlayerStatus
-from math import cos, sin, pi
+from math import cos, sin, pi, floor
 
 vec = pygame.math.Vector2
 
@@ -52,7 +52,7 @@ class Map(pygame.sprite.Sprite):
     def draw(self, SCREEN):
         SCREEN.blit(self.image, self.rect)
         for tile in self.attack_tiles:
-            rect=pygame.Rect(self.player.rect.topleft+tile[0]*48,(45,45))
+            rect=pygame.Rect(self.player.rect.topleft+tile[0]*48+vec(3,3),(45,45))
             if(rect.collidepoint(pygame.mouse.get_pos())):
                 color=(234, 207, 63)
             else:
@@ -117,10 +117,10 @@ class Map(pygame.sprite.Sprite):
         elif(entity.weapon.range_type == "linear"):
             for i in range(4):
                 for j in range(Range[0], Range[1]+1):
-                    pos = vec(j*cos(pi/2*i),j*sin(pi/2*i))+entity.map_pos
+                    pos = vec(round(j*cos(pi/2*i)),round(j*sin(pi/2*i)))+entity.map_pos
                     if(pos in self and not(self._mat[int(pos[1])][int(pos[0])] in [self.wall, " "])):
                         if(self.line_of_sight(entity.map_pos,pos)):
-                            tile_list.append([vec(j*cos(pi/2*i),j*sin(pi/2*i)),self._mat[int(pos[1])][int(pos[0])]!=self.ground])
+                            tile_list.append([vec(round(j*cos(pi/2*i)),round(j*sin(pi/2*i))),self._mat[int(pos[1])][int(pos[0])]!=self.ground])
                         else:
                             second_tile_list.append(vec(j*cos(pi/2*i),j*sin(pi/2*i)))
                         
@@ -147,15 +147,53 @@ class Map(pygame.sprite.Sprite):
         self.entities_objects.pop(i)
     
     def line_of_sight(self, coord1, coord2):
-        x, y = coord1[0]+0.5, coord1[1]+0.5
-        if(coord2[0] - coord1[0]==0):
-            return(False)
-        slope = (coord2[1] - coord1[1])/(coord2[0] - coord1[0])
-        b = y - slope*x
-        for i in range(min(int(x)+1,int(coord2[0])+1), max(int(x)+1,int(coord2[0])+1)):
-            if(self._mat[int(slope*i+b)][i]!=self.ground):# and not(vec(i,int(slope*i+b)==coord2))):
-                return(False)
-        for i in range(min(int(y)+1,int(coord2[1])+1), max(int(y)+1,int(coord2[1])+1)):
-            if(self._mat[i][int((i-b)/slope)]!=self.ground):# and not(vec(int((i-b)/slope)==coord2))):
+        List=[]
+        corrected_x, corrected_y = 0, 0
+        if(coord2[0]-coord1[0]<0):
+            corrected_x = 1
+        if(coord2[1]-coord1[1]<0):
+            corrected_y = 1
+        b=coord1[1]
+        f=lambda x: slope*x + b
+        if(coord1[0]-coord2[0]>0):
+            sens=-1
+        else:
+            sens=1
+        if(coord1[0]-coord2[0]!=0):
+            slope=(coord1[1]-coord2[1])/(coord1[0]-coord2[0])
+        if(corrected_x):
+            for i in range(floor(coord1[0]),floor(coord2[0]),sens):
+                b=coord1[1]+0.5-slope*(coord1[0]+0.5)
+                List.append(vec(i-corrected_x,floor(f(i))))
+                if(f(i)==floor(f(i))):
+                    List.append(vec(i-corrected_x,floor(f(i))-1))
+        else:
+            for i in range(floor(coord1[0])+sens,floor(coord2[0])+sens,sens):
+                slope=(coord1[1]-coord2[1])/(coord1[0]-coord2[0])
+                b=coord1[1]+0.5-slope*(coord1[0]+0.5)
+                List.append(vec(i,floor(f(i))))
+                if(f(i)==floor(f(i))):
+                    List.append(vec(i-1,floor(f(i))))
+        f=lambda x: slope*(x-b)
+        if(coord1[1]-coord2[1]>0):
+            sens=-1
+        else:
+            sens=1
+        if(coord1[1]-coord2[1]!=0):
+            slope=(coord1[0]-coord2[0])/(coord1[1]-coord2[1])
+        if(coord1[0]-coord2[0]==0):
+            f=lambda x: coord1[0]
+        if(corrected_y):
+            for i in range(floor(coord1[1]),floor(coord2[1]),sens):
+                List.append(vec(floor(f(i)),i-corrected_y))
+                if(f(i)==floor(f(i)) and coord1[0]-coord2[0]!=0):
+                    List.append(vec(floor(f(i))-1,i-corrected_y))
+        else:
+            for i in range(floor(coord1[1])+sens,floor(coord2[1])+sens,sens):
+                List.append(vec(floor(f(i)),i))
+                if(f(i)==floor(f(i))):
+                    List.append(vec(floor(f(i)),i-1))
+        for i in List:
+            if(not(self._mat[int(i[1])][int(i[0])]==self.ground or i==coord2)):
                 return(False)
         return(True)
