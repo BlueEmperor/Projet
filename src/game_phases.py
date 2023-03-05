@@ -9,6 +9,7 @@ from src.global_state import GlobalState, PlayerStatus
 from src.services.draw_service import draw_sprites
 from src.components.UI.hotbar import Hotbar
 from src.config import Config
+from src.components.menu.menu import Menu
 
 vec = pygame.math.Vector2
 
@@ -20,9 +21,10 @@ map = Map(player)
 display = DisplayInfo()
 hotbar = Hotbar()
 damage_list = []
+menu = Menu()
 
 def main_menu_phase(events):
-    pass
+    menu.draw(GlobalState.SCREEN)
 
 def gameplay_phase(events):
     player.move_animation(map, map.entities_objects)

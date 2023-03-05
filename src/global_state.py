@@ -5,7 +5,7 @@ from src.config import Config
 
 
 class GlobalState:
-    GAME_STATE = GameStatus.GAMEPLAY
+    GAME_STATE = GameStatus.MAIN_MENU
     PLAYER_STATE = PlayerStatus.MOVEMENT
     SCREEN = None
 

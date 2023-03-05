@@ -53,6 +53,10 @@ class VisualizationService:
         return(pygame.image.load(ASSETS_DIR / "cursor.png").convert_alpha())
     
     @staticmethod
+    def get_background_image():
+        return(pygame.image.load(ASSETS_DIR / "menu" / "gt4rs.jpg").convert_alpha())
+    
+    @staticmethod
     def load_main_game_displays():
         pygame.display.set_caption("Don't Touch My Presents")
         gift = VisualizationService.get_player_image()
