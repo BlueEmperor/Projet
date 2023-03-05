@@ -25,6 +25,9 @@ menu = Menu()
 
 def main_menu_phase(events):
     menu.draw(GlobalState.SCREEN)
+    for event in events:
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            menu.click_event()
 
 def gameplay_phase(events):
     player.move_animation(map, map.entities_objects)
