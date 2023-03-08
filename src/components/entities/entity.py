@@ -3,7 +3,8 @@ import pygame
 from src.components.UI.display_info import DisplayInfo
 from src.services.visualization_service import VisualizationService
 from src.components.items.basic_sword import BasicSword
-from src.components.damage_effect import DamageEffect
+from src.components.effects.damage_effect import DamageEffect
+from src.components.effects.effect import Effect
 
 class Entity:
     def __init__(self):
@@ -39,6 +40,8 @@ class Entity:
         if(other != None):
             damage_list.append(DamageEffect("-"+str(self.weapon.damage),other.rect.center))
             other.health-=self.weapon.damage
+            if(self.weapon.type=="magic"):
+                Effect.animation_list.append(self.weapon.animation(other.rect.topleft))
 
     def move(self, map, coord,relative_coord, trace=True):
         self.is_moving = relative_coord

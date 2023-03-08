@@ -1,6 +1,7 @@
 import pygame
 
 from src.components.entities.entity import Entity
+from src.components.items.boule_de_feu_staff import BdfStaff
 from src.services.visualization_service import VisualizationService
 from src.config import Config
 
@@ -17,5 +18,6 @@ class Squelette(Entity):
         self.max_health = pv
         self.health = pv
         self.damage = damage
+        self.weapon = BdfStaff()
         map.put(self.map_pos)
         

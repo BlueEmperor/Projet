@@ -14,3 +14,4 @@ class GlobalState:
         screen = pygame.display.set_mode((Config.WIDTH, Config.HEIGHT))
         screen.fill((0, 0, 0))
         GlobalState.SCREEN = screen
+        

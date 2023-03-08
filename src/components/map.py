@@ -122,8 +122,7 @@ class Map(pygame.sprite.Sprite):
                         if(self.line_of_sight(entity.map_pos,pos)):
                             tile_list.append([vec(round(j*cos(pi/2*i)),round(j*sin(pi/2*i))),self._mat[int(pos[1])][int(pos[0])]!=self.ground])
                         else:
-                            second_tile_list.append(vec(j*cos(pi/2*i),j*sin(pi/2*i)))
-                        
+                            second_tile_list.append(vec(j*cos(pi/2*i),j*sin(pi/2*i)))         
         return(tile_list, second_tile_list)
 
     def click_event(self, events, hotbar, damage_list):
@@ -147,53 +146,18 @@ class Map(pygame.sprite.Sprite):
         self.entities_objects.pop(i)
     
     def line_of_sight(self, coord1, coord2):
-        List=[]
-        corrected_x, corrected_y = 0, 0
-        if(coord2[0]-coord1[0]<0):
-            corrected_x = 1
-        if(coord2[1]-coord1[1]<0):
-            corrected_y = 1
-        b=coord1[1]
-        f=lambda x: slope*x + b
-        if(coord1[0]-coord2[0]>0):
-            sens=-1
-        else:
-            sens=1
-        if(coord1[0]-coord2[0]!=0):
-            slope=(coord1[1]-coord2[1])/(coord1[0]-coord2[0])
-        if(corrected_x):
-            for i in range(floor(coord1[0]),floor(coord2[0]),sens):
-                b=coord1[1]+0.5-slope*(coord1[0]+0.5)
-                List.append(vec(i-corrected_x,floor(f(i))))
-                if(f(i)==floor(f(i))):
-                    List.append(vec(i-corrected_x,floor(f(i))-1))
-        else:
-            for i in range(floor(coord1[0])+sens,floor(coord2[0])+sens,sens):
-                slope=(coord1[1]-coord2[1])/(coord1[0]-coord2[0])
-                b=coord1[1]+0.5-slope*(coord1[0]+0.5)
-                List.append(vec(i,floor(f(i))))
-                if(f(i)==floor(f(i))):
-                    List.append(vec(i-1,floor(f(i))))
-        f=lambda x: slope*(x-b)
-        if(coord1[1]-coord2[1]>0):
-            sens=-1
-        else:
-            sens=1
-        if(coord1[1]-coord2[1]!=0):
-            slope=(coord1[0]-coord2[0])/(coord1[1]-coord2[1])
-        if(coord1[0]-coord2[0]==0):
-            f=lambda x: coord1[0]
-        if(corrected_y):
-            for i in range(floor(coord1[1]),floor(coord2[1]),sens):
-                List.append(vec(floor(f(i)),i-corrected_y))
-                if(f(i)==floor(f(i)) and coord1[0]-coord2[0]!=0):
-                    List.append(vec(floor(f(i))-1,i-corrected_y))
-        else:
-            for i in range(floor(coord1[1])+sens,floor(coord2[1])+sens,sens):
-                List.append(vec(floor(f(i)),i))
-                if(f(i)==floor(f(i))):
-                    List.append(vec(floor(f(i)),i-1))
-        for i in List:
-            if(not(self._mat[int(i[1])][int(i[0])]==self.ground or i==coord2)):
+        list = []
+        x1,y1,x2,y2 = coord1[0], coord1[1], coord2[0], coord2[1]
+        x,y = x1,y1
+        length = abs((x2-x1) if abs(x2-x1) > abs(y2-y1) else (y2-y1))
+        dx = (x2-x1)/float(length)
+        dy = (y2-y1)/float(length)
+        list.append([round(x),round(y)])
+        for i in range(int(length)):
+            x += dx
+            y += dy
+            list.append([round(x),round(y)])
+        for i in list:
+            if(not(self._mat[int(i[1])][int(i[0])]==self.ground or i in (coord1,coord2))):
                 return(False)
         return(True)

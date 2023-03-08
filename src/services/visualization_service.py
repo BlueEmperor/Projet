@@ -9,6 +9,10 @@ class VisualizationService:
         return([[pygame.image.load(ASSETS_DIR / "player" / ("player"+str(i+1)+".png")).convert_alpha(),45] for i in range(4)])
 
     @staticmethod
+    def get_lightning_image_list():
+        return([[pygame.image.load(ASSETS_DIR / "foudre" / ("lightning"+str(i+1)+".png")).convert_alpha(),15] for i in range(5)])
+    
+    @staticmethod
     def get_map_image():
         return(pygame.image.load(ASSETS_DIR / "map.png").convert_alpha())
     
@@ -29,6 +33,10 @@ class VisualizationService:
         return(pygame.image.load(ASSETS_DIR / "select_hotbar.png").convert_alpha())
     
     @staticmethod
+    def get_potion_image():
+        return(pygame.image.load(ASSETS_DIR / "potion.png").convert_alpha())
+    
+    @staticmethod
     def get_main_font():
         return(pygame.font.Font(None, 30))
 
@@ -43,6 +51,10 @@ class VisualizationService:
     @staticmethod
     def get_bow_icon_image():
         return(pygame.image.load(ASSETS_DIR / "bow_icon.png").convert_alpha())
+    
+    @staticmethod
+    def get_staff_icon_image():
+        return(pygame.image.load(ASSETS_DIR / "bdf_staff.png").convert_alpha())
     
     @staticmethod
     def get_tile_image():

@@ -9,3 +9,4 @@ class BasicSword:
         self.range = (1,1)
         self.range_type = "around"
         self.damage = 2
+        self.type = "sword"

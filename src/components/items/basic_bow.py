@@ -9,3 +9,4 @@ class BasicBow:
         self.range = (3,7)
         self.range_type = "around"
         self.damage = 3
+        self.type = "bow"

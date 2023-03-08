@@ -10,6 +10,7 @@ from src.services.draw_service import draw_sprites
 from src.components.UI.hotbar import Hotbar
 from src.config import Config
 from src.components.menu.menu import Menu
+from src.components.effects.effect import Effect
 
 vec = pygame.math.Vector2
 
@@ -49,12 +50,14 @@ def gameplay_phase(events):
     elif(GlobalState.PLAYER_STATE == PlayerStatus.INVENTORY_MENU):
         pass
 
-    player.inventory.events_handle(events)
+    player.inventory.events_handle(events, player)
 
     GlobalState.SCREEN.fill("black") # type: ignore
     map.draw(GlobalState.SCREEN)
     player.draw(GlobalState.SCREEN)
     draw_sprites(map.entities_objects)
+    Effect.draw(GlobalState.SCREEN)
+    Effect.update()
     for i in range(len(damage_list)):
         damage_list[i].draw(GlobalState.SCREEN)
         if(damage_list[i].update()):

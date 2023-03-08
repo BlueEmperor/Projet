@@ -9,3 +9,4 @@ class EpicSword:
         self.range = (1,2)
         self.range_type = "around"
         self.damage = 7
+        self.type = "sword"

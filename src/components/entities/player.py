@@ -21,7 +21,7 @@ class Player(Entity):
         self.rect.center = self.pos # type: ignore
         self.map_pos = map_pos
         self.max_health = pv
-        self.health = pv
+        self.health = 20
         self.inventory = Inventory()
         self.weapon = self.inventory.in_hotbar[0]
         self.gold = 0

@@ -1,5 +1,6 @@
 import pygame
 pygame.init()
+
 from sys import exit
 from time import time
 
