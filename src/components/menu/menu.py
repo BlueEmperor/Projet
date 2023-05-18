@@ -26,6 +26,7 @@ class Menu:
         for button in self.buttons:
             if(button.rect.collidepoint(pygame.mouse.get_pos())):
                 button.function()
+                return
                 
     def play(self):
         GlobalState.GAME_STATE = GameStatus.GAMEPLAY

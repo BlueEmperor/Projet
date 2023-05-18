@@ -42,7 +42,7 @@ class Player(Entity):
                 for i in range(len(entities_objects)):
                     entities_objects[i].move_tick=(i+1)*15
                 Entity.play(map, entities_objects, self, damage_list)
-
+                
     def animate(self):
         self.animation_tick-=1
         if(self.animation_tick==0):

@@ -19,6 +19,6 @@ class Button:
             pygame.draw.rect(SCREEN, (255,255,255), self.rect)
         else:
             pygame.draw.rect(SCREEN, self.color, self.rect)
-        text=VisualizationService.get_main_font().render(self.text,True,(255,255,255))
+        text=VisualizationService.get_main_font().render(self.text,True,(0,0,0))
         text_rect=text.get_rect()
-        SCREEN.blit(VisualizationService.get_main_font().render(self.text,True,(0, 0, 0)), self.coord+self.size*0.5-vec(text_rect[2]/2,text_rect[3]/2))
+        SCREEN.blit(text, self.coord+self.size*0.5-vec(text_rect[2]/2,text_rect[3]/2))
